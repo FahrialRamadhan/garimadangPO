@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export default function Home() {
   const [jumlahNasi, setJumlahNasi] = useState(0);
@@ -13,6 +13,11 @@ export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [modalMetode, setModalMetode] = useState('');
   const [showToast, setShowToast] = useState(false);
+  const [buktiBase64, setBuktiBase64] = useState('');
+  const [previewBukti, setPreviewBukti] = useState('');
+  const [loadingBukti, setLoadingBukti] = useState(false);
+  const [buktiTerkirim, setBuktiTerkirim] = useState(false);
+  const [orderId, setOrderId] = useState<string>('');
 
   const totalHarga = (jumlahNasi * 16000) + (jumlahTanpa * 14000);
   const totalPorsi = jumlahNasi + jumlahTanpa;
@@ -21,6 +26,29 @@ export default function Home() {
   function handleToast() {
     setShowToast(true);
     setTimeout(() => setShowToast(false), 3000);
+  }
+
+  // ✅ DIPINDAH KE LUAR handleSubmit
+  async function handleKirimBukti() {
+    if (!buktiBase64 || !orderId) return;
+    setLoadingBukti(true);
+    try {
+      const res = await fetch('/api/upload-bukti', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId, bukti_pembayaran: buktiBase64 }),
+      });
+      const result = await res.json();
+      if (result.success) {
+        setBuktiTerkirim(true);
+      } else {
+        alert('Gagal upload bukti, coba lagi.');
+      }
+    } catch {
+      alert('Terjadi kesalahan koneksi!');
+    } finally {
+      setLoadingBukti(false);
+    }
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -39,7 +67,9 @@ export default function Home() {
       nama: fd.get('nama'),
       whatsapp: fd.get('whatsapp'),
       jumlah_nasi: jumlahNasi,
+      pedas_nasi: fd.get('pedas_nasi'),
       jumlah_tanpa: jumlahTanpa,
+      pedas_tanpa: fd.get('pedas_tanpa'),
       total_porsi: totalPorsi,
       total_harga: totalHarga,
       keterangan: fd.get('keterangan'),
@@ -64,8 +94,14 @@ export default function Home() {
       }
 
       handleToast();
+      setOrderId(result.orderId || ''); // ✅ SIMPAN orderId DARI RESPONSE
       setModalMetode(data.pembayaran as string);
       setShowModal(true);
+
+      // Reset bukti state setiap order baru
+      setBuktiBase64('');
+      setPreviewBukti('');
+      setBuktiTerkirim(false);
 
       form.reset();
       setCheckNasi(false);
@@ -296,9 +332,13 @@ export default function Home() {
               <input type="tel" name="whatsapp" required placeholder="08xxxxxxxxxx" pattern="[0-9+\s\-]{8,}" />
             </div>
 
+            {/* ====== JENIS PESANAN ====== */}
             <div className="field">
               <label>Jenis Pesanan <span className="req">*</span></label>
+
               <div className="options">
+
+                {/* ===== DAKBAL DENGAN NASI ===== */}
                 <label className={`option${checkNasi ? ' selected' : ''}`}>
                   <input
                     type="checkbox"
@@ -311,6 +351,7 @@ export default function Home() {
                   <span>Dakbal dengan Nasi</span>
                   <span className="price">Rp 16K</span>
                 </label>
+
                 {checkNasi && (
                   <div style={{ marginTop: 8 }}>
                     <input
@@ -321,11 +362,38 @@ export default function Home() {
                       value={jumlahNasi || ''}
                       onChange={e => setJumlahNasi(parseInt(e.target.value) || 0)}
                       required
-                      style={{ width: '100%', padding: '12px 14px', border: '2px solid #EADBC4', borderRadius: 12, fontFamily: 'inherit', fontSize: 15, background: '#FFFBF3' }}
+                      style={{
+                        width: '100%',
+                        padding: '12px 14px',
+                        border: '2px solid #EADBC4',
+                        borderRadius: 12,
+                        fontFamily: 'inherit',
+                        fontSize: 15,
+                        background: '#FFFBF3'
+                      }}
                     />
+                    <select
+                      name="pedas_nasi"
+                      required
+                      style={{
+                        width: '100%',
+                        padding: '12px 14px',
+                        border: '2px solid #EADBC4',
+                        borderRadius: 12,
+                        marginTop: 8,
+                        fontFamily: 'inherit',
+                        fontSize: 15,
+                        background: '#FFFBF3'
+                      }}
+                    >
+                      <option value="">Pilih Level Pedas</option>
+                      <option value="Normal">Normal</option>
+                      <option value="Pedas">Pedas</option>
+                    </select>
                   </div>
                 )}
 
+                {/* ===== DAKBAL TANPA NASI ===== */}
                 <label className={`option${checkTanpa ? ' selected' : ''}`}>
                   <input
                     type="checkbox"
@@ -338,6 +406,7 @@ export default function Home() {
                   <span>Dakbal tanpa Nasi</span>
                   <span className="price">Rp 14K</span>
                 </label>
+
                 {checkTanpa && (
                   <div style={{ marginTop: 8 }}>
                     <input
@@ -348,10 +417,37 @@ export default function Home() {
                       value={jumlahTanpa || ''}
                       onChange={e => setJumlahTanpa(parseInt(e.target.value) || 0)}
                       required
-                      style={{ width: '100%', padding: '12px 14px', border: '2px solid #EADBC4', borderRadius: 12, fontFamily: 'inherit', fontSize: 15, background: '#FFFBF3' }}
+                      style={{
+                        width: '100%',
+                        padding: '12px 14px',
+                        border: '2px solid #EADBC4',
+                        borderRadius: 12,
+                        fontFamily: 'inherit',
+                        fontSize: 15,
+                        background: '#FFFBF3'
+                      }}
                     />
+                    <select
+                      name="pedas_tanpa"
+                      required
+                      style={{
+                        width: '100%',
+                        padding: '12px 14px',
+                        border: '2px solid #EADBC4',
+                        borderRadius: 12,
+                        marginTop: 8,
+                        fontFamily: 'inherit',
+                        fontSize: 15,
+                        background: '#FFFBF3'
+                      }}
+                    >
+                      <option value="">Pilih Level Pedas</option>
+                      <option value="Normal">Normal</option>
+                      <option value="Pedas">Pedas</option>
+                    </select>
                   </div>
                 )}
+
               </div>
             </div>
 
@@ -469,7 +565,67 @@ export default function Home() {
             {modalMetode === 'QRIS' ? (
               <div className="qris-box">
                 <img src="/qris.jpeg" alt="QRIS Gari Madang" />
-                <p style={{ margin: '14px 0 0', fontSize: 13, color: '#6e3b13' }}>Setelah bayar, kirim bukti transfer ke WA admin.</p>
+
+                <p style={{ margin: '14px 0 8px', fontSize: 13, color: '#6e3b13' }}>
+                  Setelah bayar, upload bukti pembayaran di bawah ini.
+                </p>
+
+                {/* === UPLOAD BUKTI === */}
+                <label style={{
+                  display: 'block',
+                  border: '2px dashed var(--orange-1)',
+                  borderRadius: 12,
+                  padding: '16px',
+                  cursor: 'pointer',
+                  background: '#fff',
+                  textAlign: 'center',
+                }}>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={e => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const reader = new FileReader();
+                      reader.onload = () => {
+                        const result = reader.result as string;
+                        setBuktiBase64(result);
+                        setPreviewBukti(result);
+                      };
+                      reader.readAsDataURL(file);
+                    }}
+                  />
+                  {previewBukti ? (
+                    <img src={previewBukti} alt="Preview bukti" style={{
+                      width: '100%', maxHeight: 200, objectFit: 'contain', borderRadius: 8
+                    }} />
+                  ) : (
+                    <div style={{ color: '#8a5a2e', fontSize: 14 }}>
+                      📎 Klik untuk pilih foto bukti transfer
+                    </div>
+                  )}
+                </label>
+
+                {buktiBase64 && (
+                  <button
+                    onClick={handleKirimBukti}
+                    disabled={loadingBukti}
+                    style={{
+                      marginTop: 12, width: '100%', padding: '12px',
+                      background: 'var(--orange-1)', color: '#fff', border: 'none',
+                      borderRadius: 12, fontWeight: 700, fontSize: 15, cursor: 'pointer'
+                    }}
+                  >
+                    {loadingBukti ? 'Mengupload...' : '✅ Kirim Bukti Pembayaran'}
+                  </button>
+                )}
+
+                {buktiTerkirim && (
+                  <p style={{ color: 'var(--green)', fontWeight: 700, marginTop: 8 }}>
+                    ✅ Bukti berhasil dikirim!
+                  </p>
+                )}
               </div>
             ) : (
               <div className="pay-info">
