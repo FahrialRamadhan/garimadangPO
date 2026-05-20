@@ -277,7 +277,7 @@ export default function Home() {
         </div>
         <div className="hero-card">
           <div className="poster-frame">
-            <img src="/garimadang.jpeg" alt="Poster Gari Madang Pre-Order" />
+            <img src="/garimadangv2.jpeg" alt="Poster Gari Madang Pre-Order" />
           </div>
           <div className="stamp">
             <small>CLOSE PO</small>
