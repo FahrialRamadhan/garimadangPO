@@ -277,7 +277,7 @@ export default function Home() {
         </div>
         <div className="hero-card">
           <div className="poster-frame">
-            <img src="/garimadangv2.jpeg" alt="Poster Gari Madang Pre-Order" />
+            <video src="/garimadang.mp4" autoPlay loop muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}/>
           </div>
           <div className="stamp">
             <small>CLOSE PO</small>
