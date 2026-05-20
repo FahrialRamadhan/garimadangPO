@@ -266,7 +266,7 @@ export default function Home() {
       {/* HERO */}
       <section className="hero">
         <div>
-          <div className="tag"><span className="dot"></span>Open Pre-Order · Batch 2</div>
+          <div className="tag"><span className="dot"></span>Open Pre-Order · Batch 3</div>
           <h1>Open<br /><span className="em">Pre-Order!</span></h1>
           <p className="hero-sub">Koe kencot? <b>Gari Madang solusine!</b> Dakbal pedas manis ala Korea, dimasak fresh untuk batch terbatas. Pesen sekarang, ready Sabtu siang.</p>
           <div className="scribble">~ pesenan diantar gratis di sekitar kampus ~</div>
@@ -290,7 +290,7 @@ export default function Home() {
       {/* MENU */}
       <section className="menu-sec" id="menu">
         <div className="section-head">
-          <h2>Menu Batch 2</h2>
+          <h2>Menu Batch 3</h2>
           <p className="lead">Dua varian, satu cita rasa. Pilih yang sesuai sama porsi laparmu.</p>
         </div>
         <div className="menu-grid">
@@ -521,7 +521,7 @@ export default function Home() {
           {/* SIDEBAR */}
           <aside className="info-stack" id="info">
             <div className="info-card">
-              <h4>📅 Jadwal Batch 2</h4>
+              <h4>📅 Jadwal Batch 3</h4>
               <ul className="schedule">
                 <li><span className="badge">PO</span><div>Buka sampai <b>Jum&apos;at</b></div></li>
                 <li><span className="badge" style={{ background: 'var(--orange-1)' }}>SIAP</span><div>Ready <b>Sabtu siang</b></div></li>
