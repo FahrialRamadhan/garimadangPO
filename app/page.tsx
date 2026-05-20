@@ -281,9 +281,9 @@ export default function Home() {
           </div>
           <div className="stamp">
             <small>CLOSE PO</small>
-            <big>JUM&apos;AT!</big>
+            <big>MINGGU!</big>
           </div>
-          <div className="ribbon">Ready Sabtu (Siang)</div>
+          <div className="ribbon">Ready Senin (Siang)</div>
         </div>
       </section>
 
