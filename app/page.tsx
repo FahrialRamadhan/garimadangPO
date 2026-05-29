@@ -281,9 +281,9 @@ export default function Home() {
           </div>
           <div className="stamp">
             <small>CLOSE PO</small>
-            <big>MINGGU!</big>
+            <big>SELASA!</big>
           </div>
-          <div className="ribbon">Ready Senin (Siang)</div>
+          <div className="ribbon">Ready Selasa (Siang)</div>
         </div>
       </section>
 
@@ -524,8 +524,8 @@ export default function Home() {
             <div className="info-card">
               <h4>📅 Jadwal Batch 4</h4>
               <ul className="schedule">
-                <li><span className="badge">PO</span><div>Buka sampai <b>Jum&apos;at</b></div></li>
-                <li><span className="badge" style={{ background: 'var(--orange-1)' }}>SIAP</span><div>Ready <b>Sabtu siang</b></div></li>
+                <li><span className="badge">PO</span><div>Buka sampai <b>Senin</b></div></li>
+                <li><span className="badge" style={{ background: 'var(--orange-1)' }}>SIAP</span><div>Ready <b>Selasa siang</b></div></li>
               </ul>
             </div>
             <div className="info-card">
