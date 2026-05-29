@@ -266,7 +266,7 @@ export default function Home() {
       {/* HERO */}
       <section className="hero">
         <div>
-          <div className="tag"><span className="dot"></span>Open Pre-Order · Batch 3</div>
+          <div className="tag"><span className="dot"></span>Open Pre-Order · Batch 4</div>
           <h1>Open<br /><span className="em">Pre-Order!</span></h1>
           <p className="hero-sub">Koe kencot? <b>Gari Madang solusine!</b> Dakbal pedas manis ala Korea, dimasak fresh untuk batch terbatas. Pesen sekarang, ready Sabtu siang.</p>
           <div className="scribble">~ pesenan diantar gratis di sekitar kampus ~</div>
@@ -290,7 +290,7 @@ export default function Home() {
       {/* MENU */}
       <section className="menu-sec" id="menu">
         <div className="section-head">
-          <h2>Menu Batch 3</h2>
+          <h2>Menu Batch 4</h2>
           <p className="lead">Dua varian, satu cita rasa. Pilih yang sesuai sama porsi laparmu.</p>
         </div>
         <div className="menu-grid">
@@ -460,7 +460,7 @@ export default function Home() {
             <div className="field">
               <label>Pilihan pengantaran <span className="req">*</span></label>
               <div className="options">
-                {['Telkom University Purwokerto', 'Diantar ke tempat'].map(val => (
+                {['Ambil Di tempat( Market Days )', 'Diantar ke tempat'].map(val => (
                   <label key={val} className={`option${pengantaran === val ? ' selected' : ''}`}>
                     <input
                       type="radio"
@@ -471,7 +471,8 @@ export default function Home() {
                     />
                     <span>
                       {val}
-                      {val === 'Diantar ke tempat' && <small style={{ color: '#8a5a2e' }}> (free ongkir, maks 5km dari kampus Telkom)</small>}
+                      {val === 'Diantar ke tempat' && <small style={{ color: '#8a5a2e' }}> (Diantar Siang Hari )</small>}
+                      {val === 'Ambil Di tempat( Market Days )' && <small style={{ color: '#8a5a2e' }}> ( Diambil Pagi Hari )</small>}
                     </span>
                   </label>
                 ))}
@@ -521,7 +522,7 @@ export default function Home() {
           {/* SIDEBAR */}
           <aside className="info-stack" id="info">
             <div className="info-card">
-              <h4>📅 Jadwal Batch 3</h4>
+              <h4>📅 Jadwal Batch 4</h4>
               <ul className="schedule">
                 <li><span className="badge">PO</span><div>Buka sampai <b>Jum&apos;at</b></div></li>
                 <li><span className="badge" style={{ background: 'var(--orange-1)' }}>SIAP</span><div>Ready <b>Sabtu siang</b></div></li>
