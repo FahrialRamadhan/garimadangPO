@@ -460,7 +460,7 @@ export default function Home() {
             <div className="field">
               <label>Pilihan pengantaran <span className="req">*</span></label>
               <div className="options">
-                {['Ambil Di tempat( Market Days )', 'Diantar ke tempat'].map(val => (
+                {['Ambil Sendiri di Market Days TUP', 'Diantar ke tempat'].map(val => (
                   <label key={val} className={`option${pengantaran === val ? ' selected' : ''}`}>
                     <input
                       type="radio"
@@ -471,8 +471,8 @@ export default function Home() {
                     />
                     <span>
                       {val}
-                      {val === 'Diantar ke tempat' && <small style={{ color: '#8a5a2e' }}> (Diantar Siang Hari )</small>}
-                      {val === 'Ambil Di tempat( Market Days )' && <small style={{ color: '#8a5a2e' }}> ( Diambil Pagi Hari )</small>}
+                      {val === 'Diantar ke tempat' && <small style={{ color: '#8a5a2e' }}> (diantar siang hari)</small>}
+                      {val === 'Ambil Sendiri di Market Days TUP' && <small style={{ color: '#8a5a2e' }}> (diambil pagi hari)</small>}
                     </span>
                   </label>
                 ))}
