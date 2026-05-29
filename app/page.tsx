@@ -471,8 +471,8 @@ export default function Home() {
                     />
                     <span>
                       {val}
-                      {val === 'Diantar ke tempat' && <small style={{ color: '#8a5a2e' }}> (diantar siang hari)</small>}
-                      {val === 'Ambil Sendiri di Market Days TUP' && <small style={{ color: '#8a5a2e' }}> (diambil pagi hari)</small>}
+                      {val === 'Diantar ke tempat' && <small style={{ color: '#8a5a2e' }}> (diantar siang 12.00 - 14.00 WIB)</small>}
+                      {val === 'Ambil Sendiri di Market Days TUP' && <small style={{ color: '#8a5a2e' }}> (diambil pagi 08.00 - 12.00 WIB)</small>}
                     </span>
                   </label>
                 ))}
