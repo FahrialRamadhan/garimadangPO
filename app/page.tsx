@@ -281,7 +281,7 @@ export default function Home() {
           </div>
           <div className="stamp">
             <small>CLOSE PO</small>
-            <big>SELASA!</big>
+            <big>SENIN!</big>
           </div>
           <div className="ribbon">Ready Selasa (Siang)</div>
         </div>
