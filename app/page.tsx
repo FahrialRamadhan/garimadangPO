@@ -1,17 +1,31 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import {
+  Lock,
+  Package,
+  CircleCheck,
+  Flame,
+  CalendarDays,
+  MessageCircle,
+  Camera,
+  X,
+  Bell,
+} from 'lucide-react';
 
 export default function POClosedOverlay() {
   const [visible, setVisible] = useState(true);
-  const [sparks, setSparks] = useState<{ id: number; x: number; delay: number; dur: number; size: number; color: string }[]>([]);
+  const [sparks, setSparks] = useState<
+    { id: number; x: number; bottom: number; delay: number; dur: number; size: number; color: string }[]
+  >([]);
 
-  const colors = ['#FF6A00','#FFB347','#FFE27A','#C03A00','#FF8A1E'];
+  const colors = ['#FF6A00', '#FFB347', '#FFE27A', '#C03A00', '#FF8A1E'];
 
   useEffect(() => {
     const generated = Array.from({ length: 28 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
+      bottom: Math.random() * 20,
       delay: Math.random() * 6,
       dur: 5 + Math.random() * 8,
       size: Math.random() * 6 + 2,
@@ -31,16 +45,20 @@ export default function POClosedOverlay() {
         }
         @keyframes poClosed-popIn {
           from { opacity: 0; transform: scale(0.82) translateY(24px); }
-          to   { opacity: 1; transform: scale(1)   translateY(0); }
+          to   { opacity: 1; transform: scale(1) translateY(0); }
         }
         @keyframes poClosed-drift {
-          0%   { transform: translateY(0) scale(0.9);   opacity: 0; }
+          0%   { transform: translateY(0) scale(0.9); opacity: 0; }
           20%  { opacity: 0.9; }
           100% { transform: translateY(-110vh) scale(0.3); opacity: 0; }
         }
         @keyframes poClosed-pulseRing {
           0%,100% { box-shadow: 0 0 0 6px rgba(255,106,0,.2), 0 0 30px rgba(255,106,0,.4); }
           50%      { box-shadow: 0 0 0 14px rgba(255,106,0,.05), 0 0 52px rgba(255,106,0,.65); }
+        }
+        @keyframes poClosed-spinSlow {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
         }
         @keyframes poClosed-blink { 50% { opacity: .2; } }
 
@@ -60,8 +78,6 @@ export default function POClosedOverlay() {
           -webkit-backdrop-filter: blur(3px);
           overflow: hidden;
         }
-
-        /* noise */
         .poc-overlay::before {
           content: "";
           position: absolute;
@@ -97,8 +113,6 @@ export default function POClosedOverlay() {
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
         }
-
-        /* glow rim */
         .poc-card::before {
           content: "";
           position: absolute;
@@ -116,12 +130,11 @@ export default function POClosedOverlay() {
           border-radius: 50%;
           width: 34px; height: 34px;
           display: flex; align-items: center; justify-content: center;
-          font-size: 20px;
           color: rgba(255,228,194,.7);
           cursor: pointer;
           transition: background .15s ease, color .15s ease;
         }
-        .poc-close:hover { background: rgba(255,106,0,.25); color: #fff; }
+        .poc-close:hover { background: rgba(255,106,0,.3); color: #fff; }
 
         .poc-corner {
           position: absolute;
@@ -143,7 +156,6 @@ export default function POClosedOverlay() {
           border-radius: 50%;
           background: linear-gradient(135deg, #FF6A00, #C03A00);
           display: flex; align-items: center; justify-content: center;
-          font-size: 38px;
           animation: poClosed-pulseRing 2.4s ease-in-out infinite;
         }
 
@@ -199,7 +211,7 @@ export default function POClosedOverlay() {
         .poc-pill {
           display: inline-flex;
           align-items: center;
-          gap: 5px;
+          gap: 6px;
           background: rgba(255,255,255,.07);
           border: 1px solid rgba(255,255,255,.11);
           border-radius: 999px;
@@ -220,6 +232,11 @@ export default function POClosedOverlay() {
           height: 1px;
           background: rgba(255,179,71,.22);
         }
+        .poc-divider-icon {
+          animation: poClosed-spinSlow 8s linear infinite;
+          color: rgba(255,179,71,.5);
+          display: flex;
+        }
 
         .poc-next {
           background: linear-gradient(135deg, rgba(255,106,0,.17), rgba(255,183,71,.09));
@@ -232,12 +249,14 @@ export default function POClosedOverlay() {
           line-height: 1.7;
           text-align: left;
         }
-        .poc-next strong {
-          display: block;
+        .poc-next-title {
+          display: flex;
+          align-items: center;
+          gap: 8px;
           font-family: 'Bowlby One', sans-serif;
           font-size: 15px;
           color: #FFD47A;
-          margin-bottom: 5px;
+          margin-bottom: 6px;
           letter-spacing: .4px;
         }
 
@@ -259,34 +278,37 @@ export default function POClosedOverlay() {
         }
         .poc-wa-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(37,211,102,.45); }
         .poc-wa-icon {
-          width: 26px; height: 26px;
-          background: #fff;
+          width: 28px; height: 28px;
+          background: rgba(255,255,255,.2);
           border-radius: 50%;
           display: flex; align-items: center; justify-content: center;
-          font-size: 15px;
         }
 
         .poc-ig {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
           font-size: 12px;
           color: rgba(255,228,194,.55);
           text-decoration: none;
           transition: color .15s;
-          display: block;
         }
         .poc-ig:hover { color: #FFE27A; }
       `}</style>
 
       <div className="poc-overlay">
-        {/* sparks */}
+        {/* floating sparks */}
         {sparks.map(s => (
           <div
             key={s.id}
             className="poc-spark"
             style={{
-              width: s.size, height: s.size,
+              width: s.size,
+              height: s.size,
               background: s.color,
               left: `${s.x}%`,
-              bottom: `${Math.random() * 20}%`,
+              bottom: `${s.bottom}%`,
               animationDuration: `${s.dur}s`,
               animationDelay: `${s.delay}s`,
             }}
@@ -298,12 +320,16 @@ export default function POClosedOverlay() {
           <span className="poc-corner poc-tl">Gari Madang</span>
           <span className="poc-corner poc-tr">2026</span>
 
-          {/* close btn */}
-          <button className="poc-close" onClick={() => setVisible(false)} aria-label="Tutup">×</button>
+          {/* close */}
+          <button className="poc-close" onClick={() => setVisible(false)} aria-label="Tutup">
+            <X size={16} strokeWidth={2.5} />
+          </button>
 
-          {/* icon */}
+          {/* main icon: Lock */}
           <div className="poc-icon-wrap">
-            <div className="poc-icon-main">🔒</div>
+            <div className="poc-icon-main">
+              <Lock size={38} color="#fff" strokeWidth={2} />
+            </div>
           </div>
 
           {/* badge */}
@@ -322,38 +348,58 @@ export default function POClosedOverlay() {
 
           {/* pills */}
           <div className="poc-pills">
-            <span className="poc-pill">📦 Batch 4 · Selesai</span>
-            <span className="poc-pill">✅ Pesanan Diproses</span>
+            <span className="poc-pill">
+              <Package size={13} strokeWidth={2} color="#FFB347" />
+              Batch 4 · Selesai
+            </span>
+            <span className="poc-pill">
+              <CircleCheck size={13} strokeWidth={2} color="#2BB673" />
+              Pesanan Diproses
+            </span>
           </div>
 
-          {/* divider */}
+          {/* divider with Flame */}
           <div className="poc-divider">
             <div className="poc-divider-line" />
-            <span style={{ fontSize: 18 }}>🔥</span>
+            <span className="poc-divider-icon">
+              <Flame size={18} strokeWidth={1.8} color="#FFB347" />
+            </span>
             <div className="poc-divider-line" />
           </div>
 
-          {/* next batch */}
+          {/* next batch info */}
           <div className="poc-next">
-            <strong>🗓️ Kapan Buka Lagi?</strong>
+            <div className="poc-next-title">
+              <CalendarDays size={16} strokeWidth={2} color="#FFD47A" />
+              Kapan Buka Lagi?
+            </div>
             Pantau info batch berikutnya lewat Instagram &amp; WhatsApp kami.
             Jangan sampai kehabisan — slot selalu{' '}
             <b style={{ color: '#FFD47A' }}>cepet penuh!</b>
           </div>
 
-          {/* WA */}
+          {/* WA button */}
           <a
             href="https://wa.me/6285175392584?text=Halo%20Gari%20Madang%2C%20kapan%20buka%20PO%20lagi%3F"
             target="_blank"
             rel="noopener noreferrer"
             className="poc-wa-btn"
           >
-            <div className="poc-wa-icon">💬</div>
+            <div className="poc-wa-icon">
+              <MessageCircle size={16} strokeWidth={2.2} color="#fff" />
+            </div>
             Tanya Kapan Buka PO Lagi
           </a>
 
-          <a href="https://instagram.com/garimadang_" target="_blank" rel="noopener noreferrer" className="poc-ig">
-            📷 @garimadang_ · follow biar nggak ketinggalan!
+          {/* Instagram link */}
+          <a
+            href="https://instagram.com/garimadang_"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="poc-ig"
+          >
+            <Camera size={13} strokeWidth={2} />
+            @garimadang_ · follow biar nggak ketinggalan!
           </a>
         </div>
       </div>
