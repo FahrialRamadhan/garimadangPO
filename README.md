@@ -1,36 +1,117 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🍚 Garimadang Pre Order
 
-## Getting Started
+Website resmi **Pre-Order Garimadang** — aplikasi web untuk memesan menu Garimadang (nasi & tanpa nasi) secara online, lengkap dengan pemilihan level pedas, metode pembayaran QRIS, upload bukti transfer, dan pencatatan pesanan otomatis ke Google Spreadsheet.
 
-First, run the development server:
+## ✨ Fitur
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- 🧾 **Form Pre-Order** — pesan menu "Nasi" dan/atau "Tanpa Nasi" dengan pilihan level pedas
+- 🌶️ Validasi otomatis (minimal 1 porsi, level pedas wajib dipilih, batas jumlah pesanan wajar)
+- 💰 Perhitungan total harga otomatis
+- 📱 Input nomor WhatsApp & data pengantaran/alamat
+- 💳 **Pembayaran QRIS dinamis** — QRIS otomatis dibuat sesuai nominal pesanan
+- 📤 **Upload bukti pembayaran** langsung tersimpan ke Google Drive
+- 🗂️ Data pesanan otomatis tercatat ke **Google Spreadsheet** melalui Google Apps Script (GAS)
+- 🆔 ID pesanan unik untuk setiap transaksi (`order_<timestamp>`)
+
+## 🛠️ Teknologi
+
+- **Framework**: [Next.js 16](https://nextjs.org) (App Router) + TypeScript
+- **UI**: React 19, Tailwind CSS 4, [lucide-react](https://lucide.dev) (ikon), [recharts](https://recharts.org)
+- **HTTP client**: axios
+- **QRIS**: generate QR dinamis via layanan konversi QRIS (`qr.ireng.uk`) + library `qrcode`
+- **Penyimpanan bukti pembayaran**: Google Drive API (OAuth2)
+- **Database pesanan**: Google Spreadsheet via Google Apps Script (Web App)
+- **Auth Google**: `google-auth-library`
+
+## 📁 Struktur Folder
+
+```
+garimadangPO/
+├── app/
+│   ├── page.tsx              # Halaman utama: menu, form pre-order, pembayaran
+│   ├── layout.tsx            # Root layout
+│   ├── globals.css           # Styling global
+│   ├── api/
+│   │   ├── order/route.ts        # Endpoint POST: kirim data pesanan ke Google Sheet
+│   │   ├── qris/route.ts         # Endpoint GET: generate QRIS dinamis sesuai nominal
+│   │   └── upload-bukti/route.ts # Endpoint POST: upload bukti transfer ke Google Drive
+│   └── services/
+│       └── qrisService.js    # Helper untuk proses QRIS
+├── public/                   # Gambar produk, logo, QRIS statis, video promosi
+├── package.json
+└── README.md
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Instalasi & Menjalankan Project
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone repository
+   ```bash
+   git clone https://github.com/FahrialRamadhan/garimadangPO.git
+   cd garimadangPO
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Install dependencies
+   ```bash
+   npm install
+   ```
 
-## Learn More
+3. Buat file `.env.local` di root project, isi dengan variabel berikut:
+   ```env
+   # URL Web App Google Apps Script (untuk mencatat pesanan ke Spreadsheet)
+   GOOGLE_SCRIPT_URL=
 
-To learn more about Next.js, take a look at the following resources:
+   # String QRIS statis milik penerima pembayaran
+   QRIS_STATIC=
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   # Kredensial OAuth2 Google (untuk upload bukti transfer ke Google Drive)
+   GOOGLE_OAUTH_CLIENT_ID=
+   GOOGLE_OAUTH_CLIENT_SECRET=
+   GOOGLE_OAUTH_REFRESH_TOKEN=
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   # ID folder Google Drive tujuan upload bukti pembayaran
+   GOOGLE_DRIVE_FOLDER_ID=
+   ```
 
-## Deploy on Vercel
+4. Jalankan project secara lokal
+   ```bash
+   npm run dev
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+5. Buka di browser
+   ```
+   http://localhost:3000
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔌 Alur Sistem Singkat
+
+1. Pengguna mengisi form pre-order (nama, WhatsApp, menu, level pedas, jumlah, alamat/pengantaran, metode pembayaran).
+2. Data pesanan dikirim ke `/api/order` → diteruskan ke Google Apps Script → tersimpan sebagai baris baru di Google Spreadsheet dengan status **"Baru"**.
+3. Jika metode pembayaran QRIS, sistem memanggil `/api/qris` untuk membuat QR sesuai total harga.
+4. Setelah transfer, pengguna mengunggah bukti pembayaran → dikirim ke `/api/upload-bukti` → file disimpan ke Google Drive dan URL-nya dicatat ke Spreadsheet melalui GAS.
+
+## 📦 Build & Deploy
+
+```bash
+npm run build
+npm run start
+```
+
+Direkomendasikan deploy melalui [Vercel](https://vercel.com), pastikan seluruh environment variable di atas sudah diatur di dashboard hosting.
+
+## 🧑‍💻 Kontribusi
+
+1. Fork repository ini
+2. Buat branch baru (`git checkout -b fitur-baru`)
+3. Commit perubahan (`git commit -m "Menambahkan fitur X"`)
+4. Push ke branch (`git push origin fitur-baru`)
+5. Buat Pull Request
+
+## 📄 Lisensi
+
+Seluruh konten, desain, dan kode dalam project ini telah dilindungi **Hak Kekayaan Intelektual (HKI)**. Dilarang menyalin, mendistribusikan, atau menggunakan sebagian maupun seluruh isi project ini tanpa izin tertulis dari pemilik.
+
+© 2026 Garimadang. All Rights Reserved.
+
+## 📞 Kontak
+
+- Instagram: @garimadang
